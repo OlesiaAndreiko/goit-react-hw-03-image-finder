@@ -12,10 +12,11 @@ export class App extends Component {
     gallary: [],
     isLoading: false,
     error: null,
-    page: 1,
-    perPage: 12,    
+    page: 1,        
     totalHits: 0,
   };
+
+  perPage = 12
 
   componentDidMount() {
     if (this.state.gallary.length) {
@@ -62,7 +63,7 @@ export class App extends Component {
 
 
   render() {
-    const { isLoading, error, page, perPage, totalHits} = this.state;
+    const { isLoading, error, page, totalHits} = this.state;
     return (
       <>
         <Searchbar onSearch={this.getQuery} />
@@ -73,7 +74,7 @@ export class App extends Component {
 
         {error && <ErrorMessage error={error} />}
 
-        {totalHits && (totalHits > page * perPage) && (
+        {totalHits && (totalHits > page * this.perPage) && (
           <ButtonLoadMore onClick={this.changePage} />
         )}
         
