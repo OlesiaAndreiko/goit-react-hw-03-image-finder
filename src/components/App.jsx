@@ -1,4 +1,3 @@
-// import axios from 'axios';
 import { fetchImages } from '../sevices/fetchImages.service';
 import { Component } from 'react';
 import { ImageGallery } from './ImageGallery/ImageGallery';
@@ -6,6 +5,7 @@ import { Searchbar } from './Searchbar/Searchbar';
 import { ImageSkeleton } from './ImageSkeleton/ImageSkeleton';
 import { ErrorMessage } from './ErrorMessage/ErrorMessage';
 import { ButtonLoadMore } from './ButtonLoadMore/ButtonLoadMore';
+// import { Modal } from './Modal/Modal';
 
 export class App extends Component {
   state = {
@@ -38,7 +38,7 @@ export class App extends Component {
       const data = await fetchImages({q, page});
       this.setState({ gallary: data.hits, totalHits: data.totalHits });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       this.setState({
         error: 'Sorry, there was a negative effect. Please refresh the page.',
       });
@@ -61,21 +61,23 @@ export class App extends Component {
     }));
   };
 
+
   render() {
-    const { isLoading, error, page, perPage, totalHits } = this.state;
+    const { isLoading, error, page, perPage, totalHits, isOpen } = this.state;
     return (
       <>
         <Searchbar onSearch={this.getQuery} />
 
-        <ImageGallery gallary={this.state.gallary} />
+        <ImageGallery gallary={this.state.gallary} isOpen={isOpen}/>
 
         {isLoading && <ImageSkeleton />}
 
         {error && <ErrorMessage error={error} />}
 
-        {totalHits && totalHits > perPage * page && (
+        {totalHits && (totalHits > page * perPage) && (
           <ButtonLoadMore onClick={this.changePage} />
         )}
+        
       </>
     );
   }
