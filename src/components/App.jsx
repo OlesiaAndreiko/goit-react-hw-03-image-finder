@@ -31,21 +31,24 @@ export class App extends Component {
     }
   }
 
-  fetchData = async () => {
-    const { q, page } = this.state;
-    this.setState({ isLoading: true, error: null });
-    try {
-      const data = await fetchImages({q, page});
-      this.setState({ gallary: data.hits, totalHits: data.totalHits });
-    } catch (error) {
-      // console.log(error);
-      this.setState({
-        error: 'Sorry, there was a negative effect. Please refresh the page.',
-      });
-    } finally {
-      this.setState({ isLoading: false });
-    }
-  };
+    fetchData = async () => {
+      const { q, page } = this.state;
+      this.setState({ isLoading: true, error: null });
+      try {
+        const data = await fetchImages({q, page});
+        this.setState(prevState => ({
+          gallary: [...prevState.gallary, ...data.hits],
+          totalHits: data.totalHits,
+        }));
+      } catch (error) {
+        // console.log(error);
+        this.setState({
+          error: 'Sorry, there was a negative effect. Please refresh the page.',
+        });
+      } finally {
+        this.setState({ isLoading: false });
+      }
+    };
 
   makeGallary = array => {
     this.setState({ gallary: array });
