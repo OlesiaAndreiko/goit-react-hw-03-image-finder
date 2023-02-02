@@ -11,7 +11,7 @@ export const BtnMore = styled.button`
   border: transparent;
   text-decoration: none;
   cursor: pointer;
-  margin: 30px 50% 0;
+  margin: 30px 50%;
   font-family: inherit;
   font-size: 22px;
   line-height: 24px;

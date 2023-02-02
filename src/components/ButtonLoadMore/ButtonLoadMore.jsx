@@ -1,7 +1,7 @@
 import {BtnMore} from "./ButtonLoadMore.styled"
 
-export const ButtonLoadMore = () => {
-    return(
-    <BtnMore onClick={console.log}>Load More</BtnMore>
+export const ButtonLoadMore = ({onClick}) => {
+    return (
+    <BtnMore onClick={onClick}>Load More</BtnMore>
     )
 }

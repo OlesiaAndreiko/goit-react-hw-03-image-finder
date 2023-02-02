@@ -4,7 +4,7 @@ import { Component } from 'react';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageSkeleton } from './ImageSkeleton/ImageSkeleton';
-import {ErrorMessage} from "./ErrorMessage/ErrorMessage"
+import { ErrorMessage } from './ErrorMessage/ErrorMessage';
 import { ButtonLoadMore } from './ButtonLoadMore/ButtonLoadMore';
 
 export class App extends Component {
@@ -13,6 +13,8 @@ export class App extends Component {
     gallary: [],
     isLoading: false,
     error: null,
+    page: 1,
+    perPage: 12,    
     totalHits: 0,
   };
 
@@ -23,25 +25,22 @@ export class App extends Component {
   }
 
   componentDidUpdate(_, prevState) {
-    const { q } = this.state;
-    if (prevState.q !== q) {
+    const { q, page } = this.state;
+    if (q && (prevState.q !== q || prevState.page !== page)) {
       this.fetchData();
     }
   }
 
   fetchData = async () => {
-    const { q } = this.state;
+    const { q, page } = this.state;
     this.setState({ isLoading: true, error: null });
     try {
-      const data = await fetchImages(q);
-      // console.log(data.hits);
-      console.log(this.props)
+      const data = await fetchImages({q, page});
       this.setState({ gallary: data.hits, totalHits: data.totalHits });
     } catch (error) {
       console.log(error);
       this.setState({
-        error:
-          'Sorry, there was a negative effect. Please refresh the page.',
+        error: 'Sorry, there was a negative effect. Please refresh the page.',
       });
     } finally {
       this.setState({ isLoading: false });
@@ -49,23 +48,34 @@ export class App extends Component {
   };
 
   makeGallary = array => {
-    console.log(this.state.gallary);
     this.setState({ gallary: array });
   };
 
-   getQuery = searchWord => {
-    this.setState({ q: searchWord });
+  getQuery = searchWord => {
+    this.setState({ q: searchWord, gallary: [], page: 1, totalHits: 0 });
+  };
+
+  changePage = () => {
+    this.setState(prevState => ({
+      page: prevState.page + 1,
+    }));
   };
 
   render() {
-    const {isLoading, error, totalHits} = this.state
+    const { isLoading, error, page, perPage, totalHits } = this.state;
     return (
       <>
         <Searchbar onSearch={this.getQuery} />
+
         <ImageGallery gallary={this.state.gallary} />
+
         {isLoading && <ImageSkeleton />}
-        {error && <ErrorMessage error={error}/>}
-        {totalHits && <ButtonLoadMore/>}
+
+        {error && <ErrorMessage error={error} />}
+
+        {totalHits && totalHits > perPage * page && (
+          <ButtonLoadMore onClick={this.changePage} />
+        )}
       </>
     );
   }
