@@ -5,7 +5,6 @@ import { Searchbar } from './Searchbar/Searchbar';
 import { ImageSkeleton } from './ImageSkeleton/ImageSkeleton';
 import { ErrorMessage } from './ErrorMessage/ErrorMessage';
 import { ButtonLoadMore } from './ButtonLoadMore/ButtonLoadMore';
-// import { Modal } from './Modal/Modal';
 
 export class App extends Component {
   state = {
@@ -63,12 +62,12 @@ export class App extends Component {
 
 
   render() {
-    const { isLoading, error, page, perPage, totalHits, isOpen } = this.state;
+    const { isLoading, error, page, perPage, totalHits} = this.state;
     return (
       <>
         <Searchbar onSearch={this.getQuery} />
 
-        <ImageGallery gallary={this.state.gallary} isOpen={isOpen}/>
+        <ImageGallery gallary={this.state.gallary}/>
 
         {isLoading && <ImageSkeleton />}
 

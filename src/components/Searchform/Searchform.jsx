@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import PropTypes from 'prop-types';
 import { ImSearch } from 'react-icons/im';
 import {
   SearchForm,
@@ -7,6 +8,10 @@ import {
 } from './Searchform.styled';
 
 export class Searchform extends Component {
+static propTypes = {
+  onSearch: PropTypes.func.isRequired,
+}
+
   state = {
     value: '',
   };

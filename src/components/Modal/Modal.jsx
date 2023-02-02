@@ -1,7 +1,14 @@
+import PropTypes from 'prop-types';
 import { Overlay, ThumbImage, ModalImage } from './Modal.styled';
 import { Component } from 'react';
 
 export class Modal extends Component {
+  static propTypes = {
+    onClose: PropTypes.func.isRequired,
+    largeImageURL: PropTypes.string.isRequired,
+    tags: PropTypes.string.isRequired,
+  };
+
   componentDidMount() {
     window.addEventListener('keydown', this.onEscapeClose);
   }
@@ -26,7 +33,7 @@ export class Modal extends Component {
 
   render() {
     const { largeImageURL, tags } = this.props;
-    
+
     return (
       <Overlay>
         <ThumbImage>

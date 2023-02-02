@@ -1,8 +1,18 @@
+import PropTypes from 'prop-types';
 import { GalleryItem, GalleryItemImage } from './ImageGalleryItem.styled';
 import { Modal } from '../../components/Modal/Modal';
 import { Component } from 'react';
 
 export class ImageGalleryItem extends Component {
+  static propTypes = {
+    image: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      webformatURL: PropTypes.string.isRequired,
+      largeImageURL: PropTypes.string.isRequired,
+      tags: PropTypes.string.isRequired,
+    })
+  }
+
   state = {
     isOpen: false,
   };
