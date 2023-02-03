@@ -12,11 +12,11 @@ export class App extends Component {
     gallary: [],
     isLoading: false,
     error: null,
-    page: 1,        
-    totalHits: 0,
+    page: 1,
+    isShow: false,
   };
 
-  perPage = 12
+  perPage = 12;
 
   componentDidMount() {
     if (this.state.gallary.length) {
@@ -31,24 +31,24 @@ export class App extends Component {
     }
   }
 
-    fetchData = async () => {
-      const { q, page } = this.state;
-      this.setState({ isLoading: true, error: null });
-      try {
-        const data = await fetchImages({q, page});
-        this.setState(prevState => ({
-          gallary: [...prevState.gallary, ...data.hits],
-          totalHits: data.totalHits,
-        }));
-      } catch (error) {
-        // console.log(error);
-        this.setState({
-          error: 'Sorry, there was a negative effect. Please refresh the page.',
-        });
-      } finally {
-        this.setState({ isLoading: false });
-      }
-    };
+  fetchData = async () => {
+    const { q, page } = this.state;
+    this.setState({ isLoading: true, error: null });
+    try {
+      const data = await fetchImages({ q, page });
+      this.setState(prevState => ({
+        gallary: [...prevState.gallary, ...data.hits],
+        isShow: (page < Math.ceil(data.totalHits / this.perPage)),
+      }));
+    } catch (error) {
+      // console.log(error);
+      this.setState({
+        error: 'Sorry, there was a negative effect. Please refresh the page.',
+      });
+    } finally {
+      this.setState({ isLoading: false });
+    }
+  };
 
   makeGallary = array => {
     this.setState({ gallary: array });
@@ -64,23 +64,19 @@ export class App extends Component {
     }));
   };
 
-
   render() {
-    const { isLoading, error, page, totalHits} = this.state;
+    const { gallary, isLoading, error, isShow } = this.state;
     return (
       <>
         <Searchbar onSearch={this.getQuery} />
 
-        <ImageGallery gallary={this.state.gallary}/>
+        {gallary.length && <ImageGallery gallary={this.state.gallary} />}
 
         {isLoading && <ImageSkeleton />}
 
         {error && <ErrorMessage error={error} />}
 
-        {totalHits && (totalHits > page * this.perPage) && (
-          <ButtonLoadMore onClick={this.changePage} />
-        )}
-        
+        {isShow && <ButtonLoadMore onClick={this.changePage} />}
       </>
     );
   }

@@ -7,6 +7,7 @@ export const GallaryList = styled.ul`
   grid-gap: 16px;
   margin: 0;
   margin-top: 35px;
+  margin-bottom: 20px;
   padding: 0;
   list-style: none;
   margin-left: auto;
