@@ -33,7 +33,7 @@ export class App extends Component {
 
   fetchData = async () => {
     const { q, page } = this.state;
-    this.setState({ isLoading: true, error: null });
+    this.setState({ isLoading: true });
     try {
       const data = await fetchImages({ q, page });
       this.setState(prevState => ({
@@ -55,7 +55,7 @@ export class App extends Component {
   };
 
   getQuery = searchWord => {
-    this.setState({ q: searchWord, gallary: [], page: 1, totalHits: 0 });
+    this.setState({ q: searchWord, gallary: [], page: 1, error: null });
   };
 
   changePage = () => {
@@ -70,7 +70,7 @@ export class App extends Component {
       <>
         <Searchbar onSearch={this.getQuery} />
 
-        {gallary.length && <ImageGallery gallary={this.state.gallary} />}
+        {gallary.length > 0 && <ImageGallery gallary={this.state.gallary} />}
 
         {isLoading && <ImageSkeleton />}
 
